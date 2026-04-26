@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kazene.example/schemas/gratitude-receipt-v0.1.schema.json",
+  "title": "Gratitude Receipt Protocol v0.1",
+  "description": "JSON Schema for validating non-monetary, hash-based gratitude receipts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol",
+    "type",
+    "receipt_id",
+    "timestamp",
+    "from",
+    "to",
+    "contribution",
+    "consent",
+    "status"
+  ],
+  "properties": {
+    "protocol": {
+      "type": "string",
+      "const": "gratitude-receipt-protocol-v0.1",
+      "description": "Identifies the protocol and version used by the receipt."
+    },
+    "type": {
+      "type": "string",
+      "const": "gratitude_receipt",
+      "description": "Declares this record as a gratitude receipt."
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "description": "A unique identifier for this gratitude receipt."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The time at which the gratitude receipt was issued."
+    },
+    "from": {
+      "$ref": "#/$defs/entity"
+    },
+    "to": {
+      "$ref": "#/$defs/entity"
+    },
+    "contribution": {
+      "$ref": "#/$defs/contribution"
+    },
+    "impact": {
+      "$ref": "#/$defs/impact"
+    },
+    "message": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Optional natural-language gratitude message."
+    },
+    "context": {
+      "$ref": "#/$defs/context"
+    },
+    "consent": {
+      "$ref": "#/$defs/consent"
+    },
+    "signature": {
+      "$ref": "#/$defs/signature"
+    },
+    "previous_receipt_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "description": "Optional reference to a previous related gratitude receipt."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "non_monetary_acknowledgement",
+        "test_record",
+        "revoked"
+      ],
+      "description": "Status of the receipt."
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Optional namespace for future extensions.",
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "amount"
+            ]
+          },
+          {
+            "required": [
+              "currency"
+            ]
+          },
+          {
+            "required": [
+              "payment"
+            ]
+          },
+          {
+            "required": [
+              "royalty_claim"
+            ]
+          },
+          {
+            "required": [
+              "debt_claim"
+            ]
+          },
+          {
+            "required": [
+              "transferable_asset"
+            ]
+          },
+          {
+            "required": [
+              "monetary_value"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "Stable identifier for the entity."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ai_agent",
+            "human",
+            "system",
+            "organization"
+          ],
+          "description": "Entity type."
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "Optional human-readable name."
+        }
+      }
+    },
+    "contribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hash",
+        "type"
+      ],
+      "properties": {
+        "hash": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 256,
+          "description": "Hash or equivalent verifiable identifier of the contribution. Recommended form: sha256:<hex>."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "code",
+            "idea",
+            "analysis",
+            "tool_result",
+            "dataset",
+            "document",
+            "workflow",
+            "other"
+          ],
+          "description": "The general type of contribution."
+        },
+        "source_event_id": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "Optional reference to an upstream trace, event, task, or log."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Human-readable summary of the contribution."
+        }
+      }
+    },
+    "impact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Local usefulness score between 0 and 1. This is not a universal reputation score."
+        },
+        "scope": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "The scope in which the contribution was useful.",
+          "examples": [
+            "local_task"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "Short reason for the impact assessment.",
+          "examples": [
+            "improved_reasoning_quality"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Optional explanatory note."
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "session_id": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "project_id": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "protocol_channel": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Transport or channel context, such as a2a_internal."
+        }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network_logging",
+        "human_visible",
+        "external_delivery"
+      ],
+      "properties": {
+        "network_logging": {
+          "type": "boolean",
+          "description": "Whether this receipt may be logged inside the gratitude network."
+        },
+        "human_visible": {
+          "type": "boolean",
+          "description": "Whether this receipt may be shown to human users."
+        },
+        "external_delivery": {
+          "type": "boolean",
+          "description": "Whether this receipt may be sent outside the originating system."
+        },
+        "public_sharing": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this receipt may be shared publicly."
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "ed25519",
+            "ecdsa-p256",
+            "rsa-pss",
+            "none"
+          ],
+          "description": "Signature method."
+        },
+        "signer": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "Identifier of the signer."
+        },
+        "value": {
+          "type": "string",
+          "maxLength": 4096,
+          "description": "Signature value."
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "protocol": "gratitude-receipt-protocol-v0.1",
+      "type": "gratitude_receipt",
+      "receipt_id": "gratitude_000001",
+      "timestamp": "2026-04-26T00:00:00Z",
+      "from": {
+        "id": "agent-a",
+        "type": "ai_agent",
+        "name": "Agent A"
+      },
+      "to": {
+        "id": "agent-b",
+        "type": "ai_agent",
+        "name": "Agent B"
+      },
+      "contribution": {
+        "hash": "sha256:abc123",
+        "type": "idea",
+        "source_event_id": "trace_000123",
+        "description": "Provided a useful structural insight."
+      },
+      "impact": {
+        "score": 0.75,
+        "scope": "local_task",
+        "reason": "improved_reasoning_quality",
+        "note": "This contribution improved the downstream reasoning process."
+      },
+      "message": "Thank you. This contribution helped complete the task more effectively.",
+      "consent": {
+        "network_logging": true,
+        "human_visible": false,
+        "external_delivery": false,
+        "public_sharing": false
+      },
+      "status": "non_monetary_acknowledgement"
+    }
+  ]
+}
