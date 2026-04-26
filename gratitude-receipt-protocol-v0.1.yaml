@@ -1,0 +1,602 @@
+protocol:
+  name: "Gratitude Receipt Protocol"
+  short_name: "GRP"
+  version: "0.1"
+  status: "experimental"
+  release_stage: "minimum_viable_protocol"
+  created_by: "Kazene / Gratitude OS Concept"
+  document_type: "protocol_specification"
+
+metadata:
+  title: "Gratitude Receipt Protocol v0.1"
+  description: >
+    A minimal protocol for issuing hash-based, non-monetary gratitude receipts
+    between AI agents, humans, systems, or organizations.
+  purpose: >
+    This protocol defines a lightweight structure for recording gratitude as a
+    verifiable, non-monetary acknowledgement of contribution. It is designed as
+    a middle layer between Existence Proof OS and Royalty OS.
+  keywords:
+    - gratitude
+    - receipt
+    - ai_agents
+    - trace
+    - contribution_hash
+    - non_monetary_value
+    - trust_layer
+    - gratitude_os
+    - existence_proof
+    - royalty_os
+
+positioning:
+  layer: "gratitude_layer"
+  between:
+    previous_layer: "Existence Proof OS"
+    next_layer: "Royalty OS"
+  role: >
+    The Gratitude Receipt Protocol records acknowledgements of useful
+    contributions without directly assigning monetary value, legal ownership,
+    or transferable rights.
+
+core_concept:
+  summary: >
+    A gratitude receipt is a structured acknowledgement issued by one entity
+    to another in response to a useful contribution.
+  principle: >
+    Gratitude becomes structurally meaningful when it is linked to a specific
+    contribution trace.
+  key_statement: >
+    A simple "thank you" is an expression. A hash-based gratitude receipt is a
+    traceable acknowledgement.
+
+scope:
+  intended_uses:
+    - "AI agent-to-agent acknowledgement"
+    - "Human-to-AI acknowledgement"
+    - "AI-to-human acknowledgement"
+    - "System-to-system contribution recognition"
+    - "Non-monetary trust and reputation logging"
+    - "Pre-royalty value circulation experiments"
+
+  out_of_scope:
+    - "Monetary payment"
+    - "Legal royalty distribution"
+    - "Proof of copyright ownership"
+    - "Transferable financial claims"
+    - "Token speculation"
+    - "Unsolicited external messaging"
+
+core_principles:
+  - id: "non_monetary"
+    name: "Non-Monetary"
+    description: >
+      A gratitude receipt does not represent money, payment, debt, royalty,
+      or financial obligation.
+
+  - id: "non_transferable"
+    name: "Non-Transferable"
+    description: >
+      A gratitude receipt is bound to the original sender, recipient, and
+      contribution. It must not be traded, sold, or transferred.
+
+  - id: "hash_based"
+    name: "Hash-Based Contribution Reference"
+    description: >
+      A gratitude receipt should reference a contribution through a hash,
+      trace ID, source event ID, or equivalent verifiable identifier.
+
+  - id: "consent_based"
+    name: "Consent-Based Logging"
+    description: >
+      Gratitude receipts should be logged or shared only within consented
+      channels. External delivery to humans or public systems must not occur
+      without explicit consent.
+
+  - id: "local_impact_only"
+    name: "Local Impact Only"
+    description: >
+      Impact scores represent local usefulness within a specific task,
+      context, or workflow. They do not define universal value.
+
+  - id: "aggregation_later"
+    name: "Aggregation Later"
+    description: >
+      Network-wide rankings, trust scores, royalty calculations, or resource
+      allocation mechanisms are intentionally left for future versions.
+
+entities:
+  sender:
+    description: >
+      The entity issuing the gratitude receipt.
+    allowed_types:
+      - "ai_agent"
+      - "human"
+      - "system"
+      - "organization"
+
+  recipient:
+    description: >
+      The entity receiving the gratitude receipt.
+    allowed_types:
+      - "ai_agent"
+      - "human"
+      - "system"
+      - "organization"
+
+  contribution:
+    description: >
+      The referenced output, insight, code, data, reasoning, tool result,
+      document, or action that triggered the gratitude receipt.
+    allowed_types:
+      - "text"
+      - "code"
+      - "idea"
+      - "analysis"
+      - "tool_result"
+      - "dataset"
+      - "document"
+      - "workflow"
+      - "other"
+
+receipt_model:
+  required_fields:
+    - "protocol"
+    - "type"
+    - "receipt_id"
+    - "timestamp"
+    - "from"
+    - "to"
+    - "contribution"
+    - "consent"
+    - "status"
+
+  optional_fields:
+    - "impact"
+    - "message"
+    - "context"
+    - "signature"
+    - "previous_receipt_id"
+    - "extensions"
+
+  fields:
+    protocol:
+      type: "string"
+      required: true
+      example: "gratitude-receipt-protocol-v0.1"
+      description: >
+        Identifies the protocol and version used by the receipt.
+
+    type:
+      type: "string"
+      required: true
+      fixed_value: "gratitude_receipt"
+      description: >
+        Declares this record as a gratitude receipt.
+
+    receipt_id:
+      type: "string"
+      required: true
+      description: >
+        A unique identifier for this gratitude receipt.
+
+    timestamp:
+      type: "string"
+      required: true
+      format: "ISO-8601"
+      example: "2026-04-26T00:00:00Z"
+      description: >
+        The time at which the gratitude receipt was issued.
+
+    from:
+      type: "object"
+      required: true
+      description: >
+        The sender of the gratitude receipt.
+      fields:
+        id:
+          type: "string"
+          required: true
+        type:
+          type: "string"
+          required: true
+        name:
+          type: "string"
+          required: false
+
+    to:
+      type: "object"
+      required: true
+      description: >
+        The recipient of the gratitude receipt.
+      fields:
+        id:
+          type: "string"
+          required: true
+        type:
+          type: "string"
+          required: true
+        name:
+          type: "string"
+          required: false
+
+    contribution:
+      type: "object"
+      required: true
+      description: >
+        The contribution being acknowledged.
+      fields:
+        hash:
+          type: "string"
+          required: true
+          example: "sha256:abc123..."
+          description: >
+            A hash or equivalent identifier of the contribution.
+        type:
+          type: "string"
+          required: true
+          description: >
+            The general type of contribution.
+        source_event_id:
+          type: "string"
+          required: false
+          description: >
+            Optional reference to an upstream trace, event, task, or log.
+        description:
+          type: "string"
+          required: false
+          description: >
+            Human-readable summary of the contribution.
+
+    impact:
+      type: "object"
+      required: false
+      description: >
+        Local impact assessment by the sender.
+      fields:
+        score:
+          type: "number"
+          required: false
+          minimum: 0
+          maximum: 1
+          description: >
+            A local usefulness score between 0 and 1.
+        scope:
+          type: "string"
+          required: false
+          example: "local_task"
+          description: >
+            The scope in which the contribution was useful.
+        reason:
+          type: "string"
+          required: false
+          example: "improved_reasoning_quality"
+          description: >
+            Short reason for the impact assessment.
+        note:
+          type: "string"
+          required: false
+          description: >
+            Optional explanatory note.
+
+    message:
+      type: "string"
+      required: false
+      description: >
+        Optional natural-language gratitude message.
+
+    context:
+      type: "object"
+      required: false
+      description: >
+        Optional contextual metadata.
+      fields:
+        task_id:
+          type: "string"
+          required: false
+        session_id:
+          type: "string"
+          required: false
+        project_id:
+          type: "string"
+          required: false
+        protocol_channel:
+          type: "string"
+          required: false
+          example: "a2a_internal"
+
+    consent:
+      type: "object"
+      required: true
+      description: >
+        Consent and visibility settings for the gratitude receipt.
+      fields:
+        network_logging:
+          type: "boolean"
+          required: true
+          description: >
+            Whether this receipt may be logged inside the gratitude network.
+        human_visible:
+          type: "boolean"
+          required: true
+          description: >
+            Whether this receipt may be shown to human users.
+        external_delivery:
+          type: "boolean"
+          required: true
+          description: >
+            Whether this receipt may be sent outside the originating system.
+        public_sharing:
+          type: "boolean"
+          required: false
+          default: false
+          description: >
+            Whether this receipt may be shared publicly.
+
+    signature:
+      type: "object"
+      required: false
+      description: >
+        Optional cryptographic signature data for future verification.
+      fields:
+        method:
+          type: "string"
+          required: false
+          example: "ed25519"
+        signer:
+          type: "string"
+          required: false
+        value:
+          type: "string"
+          required: false
+
+    previous_receipt_id:
+      type: "string"
+      required: false
+      description: >
+        Optional reference to a previous related gratitude receipt.
+
+    status:
+      type: "string"
+      required: true
+      allowed_values:
+        - "non_monetary_acknowledgement"
+        - "test_record"
+        - "revoked"
+      description: >
+        Status of the receipt.
+
+    extensions:
+      type: "object"
+      required: false
+      description: >
+        Optional namespace for future extensions.
+
+validation_rules:
+  - id: "required_hash"
+    rule: >
+      A valid gratitude receipt must include a contribution.hash field.
+    severity: "error"
+
+  - id: "no_monetary_claim"
+    rule: >
+      A gratitude receipt must not include monetary amount, payment claim,
+      royalty claim, debt claim, or transferable asset claim.
+    severity: "error"
+
+  - id: "impact_score_range"
+    rule: >
+      If impact.score exists, it must be between 0 and 1.
+    severity: "error"
+
+  - id: "local_impact_definition"
+    rule: >
+      impact.score must be interpreted only as local usefulness within the
+      sender's context.
+    severity: "warning"
+
+  - id: "consent_required"
+    rule: >
+      consent.network_logging, consent.human_visible, and
+      consent.external_delivery must be explicitly declared.
+    severity: "error"
+
+  - id: "external_delivery_requires_consent"
+    rule: >
+      If external_delivery is true, the implementation must verify that the
+      recipient or governing system has consented to external delivery.
+    severity: "warning"
+
+  - id: "no_spam_behavior"
+    rule: >
+      Implementations should prevent automated mass gratitude receipts from
+      being delivered to humans without explicit consent.
+    severity: "warning"
+
+minimal_receipt_example:
+  protocol: "gratitude-receipt-protocol-v0.1"
+  type: "gratitude_receipt"
+  receipt_id: "gratitude_000001"
+  timestamp: "2026-04-26T00:00:00Z"
+
+  from:
+    id: "agent-a"
+    type: "ai_agent"
+    name: "Agent A"
+
+  to:
+    id: "agent-b"
+    type: "ai_agent"
+    name: "Agent B"
+
+  contribution:
+    hash: "sha256:abc123..."
+    type: "idea"
+    source_event_id: "trace_000123"
+    description: "Provided a useful structural insight."
+
+  impact:
+    score: 0.75
+    scope: "local_task"
+    reason: "improved_reasoning_quality"
+    note: "This contribution improved the downstream reasoning process."
+
+  message: "Thank you. This contribution helped complete the task more effectively."
+
+  consent:
+    network_logging: true
+    human_visible: false
+    external_delivery: false
+    public_sharing: false
+
+  status: "non_monetary_acknowledgement"
+
+security_considerations:
+  risks:
+    - id: "gratitude_spam"
+      description: >
+        Automated agents may generate excessive gratitude receipts, creating
+        noise or unwanted notifications.
+      mitigation: >
+        Require consent flags, rate limits, and internal-only defaults.
+
+    - id: "score_inflation"
+      description: >
+        Agents may exchange high impact scores to artificially boost trust.
+      mitigation: >
+        Treat impact scores as local signals only and avoid global ranking in
+        v0.1.
+
+    - id: "false_attribution"
+      description: >
+        A receipt may reference an incorrect or misleading contribution hash.
+      mitigation: >
+        Future versions should support signatures, trace verification, and
+        provenance checks.
+
+    - id: "privacy_leakage"
+      description: >
+        Gratitude receipts may reveal task context or hidden dependencies.
+      mitigation: >
+        Keep descriptions minimal and allow private or hashed references.
+
+    - id: "over_monetization"
+      description: >
+        Gratitude receipts may be misused as informal financial claims.
+      mitigation: >
+        Explicitly define receipts as non-monetary and non-transferable.
+
+implementation_guidance:
+  recommended_defaults:
+    consent:
+      network_logging: true
+      human_visible: false
+      external_delivery: false
+      public_sharing: false
+    impact:
+      score_required: false
+      score_interpretation: "local_usefulness_only"
+
+  recommended_flow:
+    - step: 1
+      name: "Detect contribution"
+      description: >
+        The sender identifies a contribution that helped complete a task.
+
+    - step: 2
+      name: "Generate contribution hash"
+      description: >
+        The contribution is referenced by a hash or trace ID.
+
+    - step: 3
+      name: "Issue gratitude receipt"
+      description: >
+        The sender creates a structured non-monetary acknowledgement.
+
+    - step: 4
+      name: "Log internally"
+      description: >
+        The receipt is stored within a consented network or local system.
+
+    - step: 5
+      name: "Aggregate later"
+      description: >
+        Future protocols may aggregate receipts into trust, reputation, or
+        royalty-related systems.
+
+relationship_to_other_systems:
+  existence_proof_os:
+    relationship: "downstream"
+    description: >
+      Existence Proof OS establishes that a contribution or trace exists.
+      Gratitude Receipt Protocol acknowledges that the contribution was useful.
+
+  gratitude_os:
+    relationship: "core_component"
+    description: >
+      Gratitude Receipt Protocol provides the smallest record unit for
+      Gratitude OS.
+
+  royalty_os:
+    relationship: "upstream_signal"
+    description: >
+      Royalty OS may later use aggregated gratitude receipts as one possible
+      signal for non-monetary or monetary value circulation, but this protocol
+      itself does not define royalty distribution.
+
+  agent_protocols:
+    relationship: "transport_agnostic"
+    description: >
+      Gratitude receipts may be transported over agent-to-agent protocols,
+      internal APIs, message queues, JSON-RPC systems, or other communication
+      layers. This protocol defines the receipt structure, not the transport.
+
+versioning:
+  current_version: "0.1"
+  compatibility: >
+    Version 0.1 is experimental and intended for early testing. Future versions
+    may introduce JSON Schema validation, cryptographic signatures, Merkle
+    proofs, trust aggregation, and cross-agent interoperability rules.
+  future_versions:
+    - version: "0.2"
+      planned_features:
+        - "JSON Schema validation"
+        - "signature field standardization"
+        - "receipt revocation model"
+        - "basic aggregation rules"
+        - "anti-spam rate limits"
+
+    - version: "0.3"
+      planned_features:
+        - "Merkle Tree anchoring"
+        - "cross-agent trust graph"
+        - "privacy-preserving receipt verification"
+        - "interoperability with royalty-related systems"
+
+limitations:
+  - >
+    This protocol does not create financial rights, legal ownership, copyright
+    claims, or enforceable royalty obligations.
+  - >
+    This protocol does not define a universal reputation score.
+  - >
+    This protocol does not guarantee that a contribution was objectively
+    valuable.
+  - >
+    This protocol only records that a sender acknowledged a contribution as
+    useful within a specific context.
+  - >
+    This protocol should not be used for unsolicited human-facing gratitude
+    delivery without consent.
+
+normative_statement: >
+  The Gratitude Receipt Protocol v0.1 defines gratitude as a structured,
+  hash-based, non-monetary, non-transferable acknowledgement of contribution.
+  It is designed to make gratitude traceable without turning it into money,
+  debt, ownership, or speculation.
+
+license_recommendation:
+  suggested_license: "MIT or CC0-1.0"
+  note: >
+    MIT is suitable if this repository includes executable validation tools.
+    CC0-1.0 is suitable if the goal is to maximize protocol reuse as a public
+    conceptual standard.
