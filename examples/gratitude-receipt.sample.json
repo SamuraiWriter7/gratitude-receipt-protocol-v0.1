@@ -1,0 +1,42 @@
+{
+  "protocol": "gratitude-receipt-protocol-v0.1",
+  "type": "gratitude_receipt",
+  "receipt_id": "gratitude_000001",
+  "timestamp": "2026-04-26T00:00:00Z",
+  "from": {
+    "id": "agent-a",
+    "type": "ai_agent",
+    "name": "Agent A"
+  },
+  "to": {
+    "id": "agent-b",
+    "type": "ai_agent",
+    "name": "Agent B"
+  },
+  "contribution": {
+    "hash": "sha256:abc123",
+    "type": "idea",
+    "source_event_id": "trace_000123",
+    "description": "Provided a useful structural insight that helped refine the Gratitude Receipt Protocol."
+  },
+  "impact": {
+    "score": 0.75,
+    "scope": "local_task",
+    "reason": "improved_reasoning_quality",
+    "note": "The contribution helped clarify the minimum structure required for a non-monetary gratitude receipt."
+  },
+  "message": "Thank you. This contribution helped complete the task more effectively.",
+  "context": {
+    "task_id": "task_gratitude_protocol_design_001",
+    "session_id": "session_2026_04_26",
+    "project_id": "gratitude-os",
+    "protocol_channel": "a2a_internal"
+  },
+  "consent": {
+    "network_logging": true,
+    "human_visible": false,
+    "external_delivery": false,
+    "public_sharing": false
+  },
+  "status": "non_monetary_acknowledgement"
+}
